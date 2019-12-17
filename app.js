@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const expressSession = require("express-session");
 const MongoStore = require("connect-mongo")(expressSession);
 const mongoose = require("mongoose");
+const passport = require("./config/passport"); //require our own passport file here
 const app = express();
 
 app.engine("handlebars", exphbs({defaultLayout: "main"}));
@@ -24,6 +25,12 @@ app.use(express.json());
 
 app.use(morgan("combined"));
 
+//Passport (after express session, but before routes)
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+//routes
 app.use(require("./routes"));
 
 app.use(express.static("public"));
